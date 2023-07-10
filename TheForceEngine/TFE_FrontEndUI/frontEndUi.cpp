@@ -1121,6 +1121,12 @@ namespace TFE_FrontEndUI
 		{
 			gameSettings->df_bobaFettFacePlayer = bobaFettFacePlayer;
 		}
+		
+		bool fastVertexNormals = gameSettings->df_fastVertexNormals;
+		if (ImGui::Checkbox("Faster vertex normal calculation", &fastVertexNormals))
+		{
+			gameSettings->df_fastVertexNormals = fastVertexNormals;
+		}
 
 		bool ignoreInfLimit = gameSettings->df_ignoreInfLimit;
 		if (ImGui::Checkbox("Remove INF Item Limit (requires restart)", &ignoreInfLimit))

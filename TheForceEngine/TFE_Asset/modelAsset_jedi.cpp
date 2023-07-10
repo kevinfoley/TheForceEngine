@@ -149,6 +149,75 @@ namespace TFE_Jedi_Object3d
 			}
 		}
 	}
+
+	//more efficient algorithm for calculating vertex normals
+	void object3d_computeVertexNormalsFast(JediModel* model)
+	{
+		const s32 vertexCount = model->vertexCount;
+		const vec3* vertex = model->vertices;
+
+		model->vertexNormals = (vec3*)model_alloc(vertexCount * sizeof(vec3));
+		vec3* outNormal = model->vertexNormals;
+		if (!outNormal)
+		{
+			TFE_System::logWrite(LOG_ERROR, "ComputeVertexNormals", "Output normal pointer is NULL.");
+			return;
+		}
+
+		std::vector<vec3> normals;
+		std::vector<s32> normalCounts;
+		normals.resize(vertexCount);
+		normalCounts.resize(vertexCount);
+
+		const JmPolygon* polygon = model->polygons;
+
+		for (s32 p = 0; p < model->polygonCount; p++, polygon++)
+		{
+			const vec3 cnrm = model->polygonNormals[p];
+			const s32 polyVtxCount = polygon->vertexCount;
+			const s32* indices = polygon->indices;
+			for (s32 i = 0; i < polyVtxCount; i++)
+			{
+				s32 v = indices[1];
+				const vec3* v1 = &model->vertices[v];
+				vec3 normal = normals[v];
+				normal.x += cnrm.x - v1->x;
+				normal.y += cnrm.y - v1->y;
+				normal.z += cnrm.z - v1->z;
+				normals[v] = normal;
+				normalCounts[v]++;
+			}
+		}
+
+		for (s32 v = 0; v < vertexCount; v++, vertex++, outNormal++)
+		{
+			// The vertex normal is the average of all connected polygon normals.
+			// The Jedi 3D object renderer expect normals in the form of v0 + dir rather than just dir as used today.
+			outNormal->x = vertex->x;
+			outNormal->y = vertex->y;
+			outNormal->z = vertex->z;
+
+			bool isValid = false;
+			s32 ncount = normalCounts[v];
+			if (ncount > 0)
+			{
+				ncount = intToFixed16(normalCounts[v]);
+				vec3 normal = normals[v];
+				normal.x = div16(normal.x, ncount);
+				normal.y = div16(normal.y, ncount);
+				normal.z = div16(normal.z, ncount);
+
+				const fixed16_16 lenSq = mul16(normal.x, normal.x) + mul16(normal.y, normal.y) + mul16(normal.z, normal.z);
+				const fixed16_16 len = fixedSqrt(lenSq);
+				if (len > 0)
+				{
+					outNormal->x += div16(normal.x, len);
+					outNormal->y += div16(normal.y, len);
+					outNormal->z += div16(normal.z, len);
+				}
+			}
+		}
+	}
 }
 
 using namespace TFE_Jedi_Object3d;
@@ -224,7 +293,14 @@ namespace TFE_Model_Jedi
 		// Compute vertex normals if vertex lighting is required.
 		if (model->flags & MFLAG_VERTEX_LIT)
 		{
-			object3d_computeVertexNormals(model);
+			if (TFE_Settings::getGameSettings()->df_fastVertexNormals)
+			{
+				object3d_computeVertexNormalsFast(model);
+			}
+			else
+			{
+				object3d_computeVertexNormals(model);
+			}
 		}
 
 		// Compute the radius of the model (from <0,0,0>).
