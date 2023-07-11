@@ -976,6 +976,9 @@ namespace TFE_DarkForces
 					break;
 				}
 
+				if (attackMod->currentBurstShots < 0) attackMod->currentBurstShots = 1;
+				else attackMod->currentBurstShots++;
+
 				if (attackMod->attackFlags & ATTFLAG_MELEE)
 				{
 					attackMod->anim.state = STATE_ANIMATE1;
@@ -1035,7 +1038,21 @@ namespace TFE_DarkForces
 				{
 					actor_setupAnimation(6, anim);
 				}
-				attackMod->anim.state = STATE_DELAY;
+				if (attackMod->currentBurstLength > 0 && attackMod->currentBurstShots < attackMod->currentBurstLength)
+				{
+					attackMod->anim.state = STATE_ANIMATEATTACK;
+					return 0;
+				}
+				else 
+				{
+					if (attackMod->maxBurstLength > 0) 
+					{
+						assert(attackMod->maxBurstLength >= attackMod->minBurstLength);
+						attackMod->currentBurstShots = -1;
+						attackMod->currentBurstLength = random(attackMod->maxBurstLength - attackMod->minBurstLength) + attackMod->minBurstLength;
+					}
+					attackMod->anim.state = STATE_DELAY;
+				}
 			} break;
 			case STATE_FIRE2:
 			{
@@ -1251,7 +1268,19 @@ namespace TFE_DarkForces
 
 		if (obj->type == OBJ_TYPE_SPRITE)
 		{
-			actor_setCurAnimation(&thinkerMod->anim);
+			ActorDispatch* logic = actor_getCurrentLogic();
+
+			//if we're firing a burst and are mid-burst, disable the walking animation to keep us
+			//from twitching between the walking and attack animations
+			AttackModule* attackMod = (AttackModule*)logic->modules[1]; //TODO: this is VERY HACKY!!
+			if (attackMod != nullptr && attackMod->maxBurstLength > 0) {
+				if (attackMod->currentBurstShots < 0 || attackMod->currentBurstShots >= 3) {
+					actor_setCurAnimation(&thinkerMod->anim);
+				}
+			}
+			else {
+				actor_setCurAnimation(&thinkerMod->anim);
+			}
 		}
 		moveMod->updateTargetFunc(moveMod, &thinkerMod->target);
 		return 0;

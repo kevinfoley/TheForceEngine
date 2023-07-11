@@ -146,6 +146,14 @@ struct AttackModule
 	fixed16_16 meleeDmg;
 	fixed16_16 meleeRate;
 	u32 attackFlags;		// see AttackFlags above.
+	//Minimum number of shots in a burst
+	u32 minBurstLength;
+	//Maximum number of shots in a burst
+	u32 maxBurstLength;
+	//How many shots will be fired in the current burst
+	s32 currentBurstLength;
+	//How many shots have been fired so far in the current burst
+	s32 currentBurstShots;
 };
 
 struct MovementModule
