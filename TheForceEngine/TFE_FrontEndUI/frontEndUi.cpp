@@ -633,6 +633,7 @@ namespace TFE_FrontEndUI
 					// Game
 					gameSettings->df_showSecretFoundMsg = true;
 					gameSettings->df_bobaFettFacePlayer = true;
+					gameSettings->df_fastVertexNormals = true;
 					// Graphics
 					graphicsSettings->rendererIndex = RENDERER_HARDWARE;
 					graphicsSettings->skyMode = SKYMODE_CYLINDER;
@@ -664,6 +665,7 @@ namespace TFE_FrontEndUI
 					// Game
 					gameSettings->df_showSecretFoundMsg = false;
 					gameSettings->df_bobaFettFacePlayer = false;
+					gameSettings->df_fastVertexNormals = false;
 					// Graphics
 					graphicsSettings->rendererIndex = RENDERER_SOFTWARE;
 					graphicsSettings->widescreen = false;
