@@ -882,6 +882,7 @@ namespace TFE_DarkForces
 					{
 						attackMod->anim.flags |= 2;
 						attackMod->anim.state = STATE_DELAY;
+						attackMod->currentBurstShots = -1;
 						return attackMod->timing.delay;
 					}
 				}
@@ -896,6 +897,7 @@ namespace TFE_DarkForces
 						attackMod->timing.delay = attackMod->timing.searchDelay;
 						actor_setupInitAnimation();
 					}
+					attackMod->currentBurstShots = -1;
 					return attackMod->timing.delay;
 				}
 				else
@@ -1274,7 +1276,7 @@ namespace TFE_DarkForces
 			//from twitching between the walking and attack animations
 			AttackModule* attackMod = (AttackModule*)logic->modules[1]; //TODO: this is VERY HACKY!!
 			if (attackMod != nullptr && attackMod->maxBurstLength > 0) {
-				if (attackMod->currentBurstShots < 0 || attackMod->currentBurstShots >= 3) {
+				if (attackMod->currentBurstShots < 0 || attackMod->currentBurstShots >= attackMod->maxBurstLength) {
 					actor_setCurAnimation(&thinkerMod->anim);
 				}
 			}
