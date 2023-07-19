@@ -845,6 +845,17 @@ namespace TFE_DarkForces
 		{
 			case STATE_DELAY:
 			{
+				if (logic->animTable == s_troopAnimTable) //stormtrooper
+				{
+					attackMod->minBurstLength = 1;
+					attackMod->maxBurstLength = 3;
+				}
+				else if (logic->animTable == s_commandoAnimTable) //commando
+				{
+					attackMod->minBurstLength = 1;
+					attackMod->maxBurstLength = 2;
+				}
+
 				if (attackMod->anim.flags & 2)
 				{
 					// Clear attack based lighting.

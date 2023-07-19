@@ -98,9 +98,6 @@ namespace TFE_DarkForces
 		FLAGS_CLEAR_SET(attackMod->attackFlags, ATTFLAG_MELEE, ATTFLAG_RANGED);
 		attackMod->projType = PROJ_RIFLE_BOLT;
 		attackMod->attackPrimSndSrc = s_rifleSndSrc;
-		attackMod->minBurstLength = 1;
-		attackMod->maxBurstLength = 3;
-		attackMod->currentBurstLength = 3;
 		attackMod->currentBurstShots = -1;
 		actor_addModule(dispatch, (ActorModule*)attackMod);
 
@@ -142,8 +139,7 @@ namespace TFE_DarkForces
 		FLAGS_CLEAR_SET(attackMod->attackFlags, ATTFLAG_MELEE, ATTFLAG_RANGED);
 		attackMod->projType = PROJ_RIFLE_BOLT;
 		attackMod->attackPrimSndSrc = s_rifleSndSrc;
-		attackMod->minBurstLength = 1;
-		attackMod->maxBurstLength = 2;
+		attackMod->currentBurstShots = -1;
 		actor_addModule(dispatch, (ActorModule*)attackMod);
 
 		ThinkerModule* thinkerMod = actor_createThinkerModule(dispatch);
