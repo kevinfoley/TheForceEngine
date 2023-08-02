@@ -2367,7 +2367,8 @@ namespace TFE_FrontEndUI
 			ImGui::SetNextItemWidth(196 * s_uiScale);
 			ImGui::SliderFloat("Strength", &graphics->bloomStrength, 0.0f, 1.0f);
 			ImGui::SetNextItemWidth(196 * s_uiScale);
-			ImGui::SliderFloat("Spread", &graphics->bloomSpread, 0.0f, 1.0f);
+			if (graphics->bloomSpread >= 1) ImGui::SliderFloat("Spread", &graphics->bloomSpread, 0.0f, 1.0f, "JJ ABRAMS");
+			else ImGui::SliderFloat("Spread", &graphics->bloomSpread, 0.0f, 1.0f);
 		}
 
 		const ColorCorrection colorCorrection = { graphics->brightness, graphics->contrast, graphics->saturation, graphics->gamma };

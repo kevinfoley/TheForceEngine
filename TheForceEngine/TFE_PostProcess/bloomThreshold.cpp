@@ -35,6 +35,7 @@ void BloomThreshold::setEffectState()
 	if (m_shader)
 	{
 		f32 bloomIntensity = TFE_Settings::getGraphicsSettings()->bloomStrength * 8.0f;
+		if (TFE_Settings::getGraphicsSettings()->bloomSpread >= 1) bloomIntensity /= 8.0f;
 		m_shader->setVariable(m_bloomIntensityId, SVT_SCALAR, &bloomIntensity);
 	}
 }
