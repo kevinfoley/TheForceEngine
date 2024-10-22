@@ -29,6 +29,14 @@ struct IGame;
 
 namespace TFE_FrontEndUI
 {
+	enum FontName
+	{
+		FONT_DIALOG,
+		FONT_MENU,
+		FONT_TITLE,
+		FONT_VERSION,
+	};
+
 	void init();
 	void initConsole();
 	void shutdown();
@@ -61,6 +69,7 @@ namespace TFE_FrontEndUI
 	void  clearNoDataState();
 	bool  isNoDataMessageSet();
 	ImFont* getDialogFont();
+	ImFont* getFont(FontName name);
 
 	void setCanSave(bool canSave);
 	bool getCanSave();

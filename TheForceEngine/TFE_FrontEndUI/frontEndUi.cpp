@@ -2,6 +2,7 @@
 #include "console.h"
 #include "profilerView.h"
 #include "modLoader.h"
+#include "uiScripts.h"
 #include <TFE_A11y/accessibility.h>
 #include <TFE_Audio/audioSystem.h>
 #include <TFE_Audio/midiPlayer.h>
@@ -307,6 +308,8 @@ namespace TFE_FrontEndUI
 
 	void init()
 	{
+		registerScriptFunctions();
+
 		TFE_System::logWrite(LOG_MSG, "Startup", "TFE_FrontEndUI::init");
 		s_appState = APP_STATE_MENU;
 		s_menuRetState = APP_STATE_MENU;
@@ -556,6 +559,7 @@ namespace TFE_FrontEndUI
 	{
 		const u32 windowInvisFlags = ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings;
 
+		uiScript_update();
 		DisplayInfo display;
 		TFE_RenderBackend::getDisplayInfo(&display);
 		u32 w = display.width;
@@ -3162,6 +3166,22 @@ namespace TFE_FrontEndUI
 	ImFont* getDialogFont()
 	{
 		return s_dialogFont;
+	}
+	
+	ImFont* getFont(FontName name)
+	{
+		switch (name)
+		{
+		case FONT_DIALOG:
+			return s_dialogFont;
+		case FONT_MENU:
+			return s_menuFont;
+		case FONT_TITLE:
+			return s_titleFont;
+		case FONT_VERSION:
+			return s_versionFont;
+		}
+		return nullptr;
 	}
 
 	void setCanSave(bool canSave)

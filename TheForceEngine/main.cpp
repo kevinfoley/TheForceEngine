@@ -645,6 +645,12 @@ int main(int argc, char* argv[])
 		TFE_System::logClose();
 		return PROGRAM_ERROR;
 	}
+
+	// Test
+#ifdef ENABLE_FORCE_SCRIPT
+	TFE_ForceScript::init();
+#endif
+
 	TFE_FrontEndUI::initConsole();
 	TFE_Audio::init(s_nullAudioDevice, TFE_Settings::getSoundSettings()->audioDevice);
 	TFE_MidiPlayer::init(TFE_Settings::getSoundSettings()->midiOutput, (MidiDeviceType)TFE_Settings::getSoundSettings()->midiType);
@@ -665,11 +671,6 @@ int main(int argc, char* argv[])
 
 	// Optional Reticle.
 	reticle_init();
-
-	// Test
-	#ifdef ENABLE_FORCE_SCRIPT
-	TFE_ForceScript::init();
-	#endif
 		
 	// Start up the game and skip the title screen.
 	if (firstRun)
