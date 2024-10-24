@@ -10,4 +10,6 @@ namespace TFE_FrontEndUI
 	void showUiScript(const char* scriptName);
 
 	void uiScript_update();
+	void uiScript_updateConfigA11y(s32 tabWidth, u32 height);
+	void uiScript_updateConfigDarkForcesCheats();
 }

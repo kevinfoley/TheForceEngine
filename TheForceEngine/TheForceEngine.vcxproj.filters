@@ -194,6 +194,9 @@
     <Filter Include="Source\TFE_Editor\LevelEditor\Scripting">
       <UniqueIdentifier>{edd9ea1a-0570-4524-a9d7-f703a2c09cad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\TFE_FrontEndUI\Scripting">
+      <UniqueIdentifier>{f36f07d0-19b1-4ada-b1af-eb941788275c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -1399,6 +1402,18 @@
     <ClInclude Include="TFE_Editor\LevelEditor\editSector.h">
       <Filter>Source\TFE_Editor\LevelEditor</Filter>
     </ClInclude>
+    <ClInclude Include="uis_imGui.h">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="uiScripts.h">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="uis_a11y.h">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="uis_frontEndUi.h">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2438,6 +2453,24 @@
     </ClCompile>
     <ClCompile Include="TFE_Editor\LevelEditor\editSector.cpp">
       <Filter>Source\TFE_Editor\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="uis_imGui.cpp">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="uiScripts.cpp">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="uis_a11y.cpp">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="uis_frontEndUi.cpp">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="uis_darkForces.cpp">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="uis_darkForces.h">
+      <Filter>Source\TFE_FrontEndUI\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,30 +7,17 @@
 #include <TFE_System/types.h>
 #include <TFE_ForceScript/float2.h>
 #include <TFE_FrontEndUI/frontEndUi.h>
+#include <TFE_RenderBackend/renderBackend.h>
 #include <string>
 
 namespace TFE_FrontEndUI
 {
-	class UIS_ImGui
+	class UIS_FrontEndUi
 	{
 	public:
-		// Properties
-		// Functions
-		//    - Text
-		void Text(std::string& text);
-		void TextWrapped(std::string& text);
-		void LabelText(std::string& label, std::string& fmt);
-		void PushFont(FontName fontName);
-		void PopFont();
-		//    - Window
-		void SetNextWindowPos(f32 width, f32 height);
-		void SetNextWindowSize(f32 width, f32 height);
-		void Begin(std::string& label, u32 flags);
-		void End();
-		//    - Layout
-		void Separator();
-		//    - Controls
-		bool Button(std::string& label);
+		f32 getUiScale();
+		DisplayInfo getDisplayInfo();
+		void Tooltip(std::string& text);
 		// System
 		bool scriptRegister(asIScriptEngine* engine);
 	};
