@@ -21,10 +21,11 @@
 #include <uis_darkForces.h>
 #include <uis_Imgui.h>
 #include <uis_FrontEndUi.h>
+#include <uis_A11y.h>
 
 namespace TFE_FrontEndUI
 {
-	const bool AUTO_RELOAD_SCRIPTS = true;
+	const bool AUTO_RELOAD_SCRIPTS = false;
 	static char s_scriptBuffer[4096];
 	static std::vector<std::string> s_scriptsToRun;
 
@@ -33,6 +34,7 @@ namespace TFE_FrontEndUI
 	UIS_DarkForces s_uisDarkForces;
 	UIS_ImGui s_uisImgui;
 	UIS_FrontEndUi s_uisFrontEndUi;
+	UIS_A11y s_uisA11y;
 	std::map<std::string, TFE_ForceScript::ModuleHandle> s_modules;
 
 	// Print any script messages, warnings or errors to the editor output.
@@ -51,6 +53,7 @@ namespace TFE_FrontEndUI
 		s_uisDarkForces.scriptRegister(engine);
 		s_uisImgui.scriptRegister(engine);
 		s_uisFrontEndUi.scriptRegister(engine);
+		s_uisA11y.scriptRegister(engine);
 
 		// Math/Intrinsics.
 	}
@@ -118,6 +121,12 @@ namespace TFE_FrontEndUI
 		s_scriptsToRun.clear();
 	}
 	
+	void uiScript_updateConfigA11y(s32 tabWidth, u32 height)
+	{
+		s_scriptsToRun.push_back("ConfigA11y");
+		uiScript_update();
+	}
+	
 	void uiScript_updateConfigDarkForcesCheats()
 	{
 		s_scriptsToRun.push_back("ConfigCheats");
@@ -134,6 +143,7 @@ namespace TFE_FrontEndUI
 	void showUiScript(const char* scriptName) {}
 
 	void uiScript_update() {}
+	void uiScript_updateConfigA11y() {}
 	void uiScript_updateConfigDarkForcesCheats() {}
 }
 #endif
