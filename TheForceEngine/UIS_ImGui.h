@@ -11,6 +11,17 @@
 
 namespace TFE_FrontEndUI
 {
+	struct FloatResult {
+		f32 value;
+		bool pressed;
+
+		FloatResult(const f32& value, bool pressed)
+		{
+			this->value = value;
+			this->pressed = pressed;
+		}
+	};
+
 	class UIS_ImGui
 	{
 	public:
@@ -29,10 +40,13 @@ namespace TFE_FrontEndUI
 		void Begin(std::string& label, u32 flags);
 		void End();
 		//    - Layout
+		void SameLine(f32 offsetX, f32 spacing = -1.0);
 		void Separator();
+		void SetNextItemWidth(f32 width);
 		//    - Controls
 		bool Button(std::string& label);
 		bool Checkbox(std::string& label, bool* value);
+		FloatResult SliderFloat(std::string& label, float* v, float v_min, float v_max, std::string& format, u32 flags = 0);
 		// System
 		bool scriptRegister(asIScriptEngine* engine);
 	};

@@ -58,9 +58,19 @@ namespace TFE_FrontEndUI
 	}
 	
 	// Layout
+	void UIS_ImGui::SameLine(f32 offsetX, f32 spacing)
+	{
+		ImGui::SameLine(offsetX, spacing);
+	}
+
 	void UIS_ImGui::Separator()
 	{
 		ImGui::Separator();
+	}
+
+	void UIS_ImGui::SetNextItemWidth(f32 width)
+	{
+		ImGui::SetNextItemWidth(width);
 	}
 
 	// Controls
@@ -71,6 +81,13 @@ namespace TFE_FrontEndUI
 	bool UIS_ImGui::Checkbox(std::string& label, bool* value)
 	{
 		return ImGui::Checkbox(label.c_str(), value);
+	}
+	FloatResult UIS_ImGui::SliderFloat(std::string& label, float* v, float v_min, float v_max, std::string& format, u32 flags)
+	{
+		bool pressed;
+		if (format.empty()) { pressed = ImGui::SliderFloat(label.c_str(), v, v_min, v_max, "%.3f", flags); }
+		else { pressed = ImGui::SliderFloat(label.c_str(), v, v_min, v_max, format.c_str(), flags); }
+		return FloatResult(*v, pressed);
 	}
 
 	////////////////////////////////////////////////////////
@@ -94,6 +111,11 @@ namespace TFE_FrontEndUI
 		////////////////////////////////////////////////////////
 		//  Objects
 		////////////////////////////////////////////////////////
+		// FloatResult:
+		res = engine->RegisterObjectType("FloatResult", sizeof(FloatResult), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<TFE_FrontEndUI::FloatResult>()); assert(res >= 0);
+		res = engine->RegisterObjectProperty("FloatResult", "float value", asOFFSET(FloatResult, value)); assert(res >= 0);
+		res = engine->RegisterObjectProperty("FloatResult", "bool pressed", asOFFSET(FloatResult, pressed)); assert(res >= 0);
+
 		// This helper class:
 		res = engine->RegisterObjectType("Imgui", sizeof(UIS_ImGui), asOBJ_VALUE | asOBJ_POD); assert(res >= 0);
 		//   - Text
@@ -109,10 +131,13 @@ namespace TFE_FrontEndUI
 		res = engine->RegisterObjectMethod("Imgui", "void Begin(const string &in, uint)", asMETHOD(UIS_ImGui, Begin), asCALL_THISCALL);  assert(res >= 0);
 		res = engine->RegisterObjectMethod("Imgui", "void End()", asMETHOD(UIS_ImGui, End), asCALL_THISCALL);  assert(res >= 0);
 		//   - Layout
+		res = engine->RegisterObjectMethod("Imgui", "void SameLine()", asMETHOD(UIS_ImGui, SameLine), asCALL_THISCALL);  assert(res >= 0);
 		res = engine->RegisterObjectMethod("Imgui", "void Separator()", asMETHOD(UIS_ImGui, Separator), asCALL_THISCALL);  assert(res >= 0);
+		res = engine->RegisterObjectMethod("Imgui", "void SetNextItemWidth()", asMETHOD(UIS_ImGui, SetNextItemWidth), asCALL_THISCALL);  assert(res >= 0);
 		//   - Controls
 		res = engine->RegisterObjectMethod("Imgui", "bool Button(const string &in)", asMETHOD(UIS_ImGui, Button), asCALL_THISCALL);  assert(res >= 0);
 		res = engine->RegisterObjectMethod("Imgui", "bool Checkbox(const string &in, bool&in)", asMETHOD(UIS_ImGui, Checkbox), asCALL_THISCALL);  assert(res >= 0);
+		res = engine->RegisterObjectMethod("Imgui", "FloatResult SliderFloat(const string &in, float&in, float, float, const string &in, uint)", asMETHOD(UIS_ImGui, SliderFloat), asCALL_THISCALL);  assert(res >= 0);
 		//   - Script variable
 		res = engine->RegisterGlobalProperty("Imgui imgui", this);  assert(res >= 0);
 		return res >= 0;
