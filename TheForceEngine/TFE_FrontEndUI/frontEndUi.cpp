@@ -266,7 +266,6 @@ namespace TFE_FrontEndUI
 
 	void configSaveLoadBegin(bool save);
 	void renderBackground(bool forceTextureUpdate = false);
-	void Tooltip(const char* text);
 	void setSettingsTemplate(SettingsTemplate temp);
 
 	void menuItem_Start();
@@ -559,7 +558,6 @@ namespace TFE_FrontEndUI
 	{
 		const u32 windowInvisFlags = ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings;
 
-		uiScript_update();
 		DisplayInfo display;
 		TFE_RenderBackend::getDisplayInfo(&display);
 		u32 w = display.width;
@@ -1296,6 +1294,8 @@ namespace TFE_FrontEndUI
 
 	void configDarkForcesCheats()
 	{
+		uiScript_updateConfigDarkForcesCheats();
+
 		bool invincibility = TFE_DarkForces::s_invincibility;
 		if (ImGui::Checkbox("Invinciblity (LAIMLAME)", &invincibility))
 		{
@@ -3326,4 +3326,7 @@ namespace TFE_FrontEndUI
 		TFE_Settings::writeToDisk();
 		inputMapping_serialize();
 	}
+
+	// Getters used by UI script.
+	f32 getUiScale() { return s_uiScale; }
 }

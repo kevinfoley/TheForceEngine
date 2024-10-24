@@ -1,5 +1,4 @@
 #include "uiScripts.h"
-#include "UIS_Imgui.h"
 #include <TFE_System/math.h>
 #include <TFE_System/system.h>
 #include <TFE_Jedi/Math/core_math.h>
@@ -19,16 +18,22 @@
 
 #ifdef ENABLE_FORCE_SCRIPT
 #include <angelscript.h>
+#include <uis_darkForces.h>
+#include <uis_Imgui.h>
+#include <uis_FrontEndUi.h>
 
 namespace TFE_FrontEndUI
 {
+	const bool AUTO_RELOAD_SCRIPTS = true;
 	static char s_scriptBuffer[4096];
 	static std::vector<std::string> s_scriptsToRun;
 
 	bool s_levelScriptRegistered = false;
 	bool s_execFromOutput = false;
+	UIS_DarkForces s_uisDarkForces;
 	UIS_ImGui s_uisImgui;
-	TFE_ForceScript::ModuleHandle s_imguiHandle;
+	UIS_FrontEndUi s_uisFrontEndUi;
+	std::map<std::string, TFE_ForceScript::ModuleHandle> s_modules;
 
 	// Print any script messages, warnings or errors to the editor output.
 	void scriptCallback(LogWriteType type, const char* section, s32 row, s32 col, const char* msg)
@@ -43,7 +48,9 @@ namespace TFE_FrontEndUI
 		TFE_ForceScript::overrideCallback(scriptCallback);
 
 		asIScriptEngine* engine = (asIScriptEngine*)TFE_ForceScript::getEngine();
+		s_uisDarkForces.scriptRegister(engine);
 		s_uisImgui.scriptRegister(engine);
+		s_uisFrontEndUi.scriptRegister(engine);
 
 		// Math/Intrinsics.
 	}
@@ -91,7 +98,6 @@ namespace TFE_FrontEndUI
 
 	void uiScript_update()
 	{
-		s_scriptsToRun.push_back("ImGui");
 		char scriptPath[TFE_MAX_PATH];
 		const s32 count = (s32)s_scriptsToRun.size();
 		const std::string* scriptName = s_scriptsToRun.data();
@@ -99,15 +105,23 @@ namespace TFE_FrontEndUI
 		{
 			sprintf(scriptPath, "EditorDef/Scripts/%s.fs", scriptName->c_str());
 
-			//if (s_imguiHandle == nullptr) 
-				s_imguiHandle = TFE_ForceScript::createModule(scriptName->c_str(), scriptPath);
-			if (s_imguiHandle)
+			if (AUTO_RELOAD_SCRIPTS || !s_modules.count(*scriptName)) {
+				s_modules[*scriptName] = TFE_ForceScript::createModule(scriptName->c_str(), scriptPath);
+			}
+			if (s_modules.count(*scriptName))
 			{
-				TFE_ForceScript::FunctionHandle func = TFE_ForceScript::findScriptFunc(s_imguiHandle, "void main()");
+				TFE_ForceScript::ModuleHandle handle = s_modules[*scriptName];
+				TFE_ForceScript::FunctionHandle func = TFE_ForceScript::findScriptFunc(handle, "void main()");
 				TFE_ForceScript::execFunc(func);
 			}
 		}
 		s_scriptsToRun.clear();
+	}
+	
+	void uiScript_updateConfigDarkForcesCheats()
+	{
+		s_scriptsToRun.push_back("ConfigCheats");
+		uiScript_update();
 	}
 }
 #else
@@ -120,5 +134,6 @@ namespace TFE_FrontEndUI
 	void showUiScript(const char* scriptName) {}
 
 	void uiScript_update() {}
+	void uiScript_updateConfigDarkForcesCheats() {}
 }
 #endif

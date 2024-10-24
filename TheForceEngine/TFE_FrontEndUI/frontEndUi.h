@@ -76,4 +76,10 @@ namespace TFE_FrontEndUI
 
 	void toggleProfilerView();
 	void drawFps(s32 windowWidth);
+
+	// GUI Tools
+	void Tooltip(const char* text);
+
+	// Property getters
+	f32 getUiScale();
 }

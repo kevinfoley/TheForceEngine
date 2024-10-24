@@ -23,6 +23,7 @@ namespace TFE_FrontEndUI
 		void PushFont(FontName fontName);
 		void PopFont();
 		//    - Window
+		void SetWindowSize(f32 width, f32 height);
 		void SetNextWindowPos(f32 width, f32 height);
 		void SetNextWindowSize(f32 width, f32 height);
 		void Begin(std::string& label, u32 flags);
@@ -31,6 +32,7 @@ namespace TFE_FrontEndUI
 		void Separator();
 		//    - Controls
 		bool Button(std::string& label);
+		bool Checkbox(std::string& label, bool* value);
 		// System
 		bool scriptRegister(asIScriptEngine* engine);
 	};
